@@ -1,0 +1,577 @@
+openapi: 3.0.3
+info:
+  title: Ecommerce v1.0
+  description: |-
+    This is a sample Ecommerce Store Server based on the OpenAPI 3.0 specification.  
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Ngonx
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://localhost:8080
+tags:
+  - name: products
+    description: Everything about your products
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+  - name: store
+    description: Access to productsstore orders
+    externalDocs:
+      description: Find out more about our store
+      url: http://swagger.io
+  - name: user
+    description: Operations about user
+paths:
+  /products/{id}:
+    put:
+      tags:
+        - products
+      summary: Update an existing products 
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: String ID of the user to get
+      
+      
+      description: Update an existing products by Id
+      operationId: updateproducts
+      requestBody:
+        description: Update an existent products in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/products'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/products'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/products'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/products'          
+            
+         
+        '400':
+          description: Data Incorrect
+        '500':
+          description: Internal Error
+      security:
+        - productsstore_auth:
+            - write:productss
+            - read:productss
+    
+    get:
+      tags:
+        - products
+      summary: Find products by ID
+      description: Returns a single products
+      operationId: getproductsById
+      parameters:
+        - name: id
+          in: path
+          description: ID of products to return
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/products'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/products'
+        '400':
+          description: Data Incorrect
+        '500':
+          description: Internal Error
+      security:
+        - api_key: []
+        - productsstore_auth:
+            - write:productss
+            - read:productss
+            
+    delete:
+      tags:
+        - products
+      summary: Deletes a product by ID
+      description: delete a products by Id
+      operationId: deleteproducts by Id
+      parameters:
+      
+        - name: id
+          in: path
+          description: products id to delete
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: products id to delete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/products'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/products'
+        '400':
+          description: Data Incorrect
+        '500':
+          description: Internal Error
+      security:
+        - productsstore_auth:
+            - write:productss
+            - read:productss
+  
+  
+  
+  /products/:
+    get:
+      tags:
+        - products
+      summary: Show all products
+      description: Show all products
+      
+     
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/products'          
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/products'
+        
+        '400':
+          description: Data Incorrect
+        '500':
+          description: Internal Error
+      security:
+        - productsstore_auth:
+            - write:productss
+            - read:productss
+  
+  
+  
+  
+  /store/inventory:
+    get:
+      tags:
+        - store
+      summary: Returns products inventories by status
+      description: Returns a map of status codes to quantities
+      operationId: getInventory
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - api_key: []
+  /store/order:
+    post:
+      tags:
+        - store
+      summary: Place an order for a products
+      description: Place a new order in the store
+      operationId: placeOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '500':
+          description: Internal Error
+  /store/order/{orderId}:
+    get:
+      tags:
+        - store
+      summary: Find purchase order by ID
+      description: For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.
+      operationId: getOrderById
+      parameters:
+        - name: orderId
+          in: path
+          description: ID of order that needs to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid ID supplied
+        '500':
+          description: Internal Error
+    delete:
+      tags:
+        - store
+      summary: Delete purchase order by ID
+      description: For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+      operationId: deleteOrder
+      parameters:
+        - name: orderId
+          in: path
+          description: ID of the order that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '500':
+          description: Internal Error
+  /user:
+    post:
+      tags:
+        - user
+      summary: Create user 
+      description: This can only be done by the logged in user.
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+  
+  
+  
+    get:
+      tags:
+        - user
+      summary: Logs user into the system
+      description: 'Valid acces for new'
+      operationId: loginUser
+      
+      responses:
+        '200':
+          description: '{acceso:"usuario creado"}'
+         
+        '500':
+          description: Internal Error
+  
+  /user/login:
+    get:
+      tags:
+        - user
+      summary: Logs user into the system
+      description: 'start session'
+      
+      responses:
+        '200':
+          description: "{datos:{resultado:true}}"
+          
+        '400':
+          description: Invalid username/password supplied
+    post:
+      tags:
+        - user
+      summary: Start session 
+      description: This can only be done by the logged in user.
+      operationId: startSession
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+  
+  
+  /user/logout:
+    get:
+      tags:
+        - user
+      summary: Logs out current logged in user session
+      description: ''
+      operationId: logoutUser
+      parameters: []
+      responses:
+        default:
+          description: successful operation
+  
+    
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        nombre:
+          type: integer
+          format: int64
+          example: 10
+        productsId:
+          type: integer
+          format: int64
+          example: 198772
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+        shipDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: Order Status
+          example: approved
+          enum:
+            - placed
+            - approved
+            - delivered
+        complete:
+          type: boolean
+      xml:
+        name: order
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 100000
+        username:
+          type: string
+          example: fehguy
+        address:
+          type: array
+          xml:
+            name: addresses
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Address'
+      xml:
+        name: customer
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: 437 Lytton
+        city:
+          type: string
+          example: Palo Alto
+        state:
+          type: string
+          example: CA
+        zip:
+          type: string
+          example: '94301'
+      xml:
+        name: address
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Dogs
+      xml:
+        name: category
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: string
+          example: "ObjectId('507f1f77bcf86cd799439011')"
+
+        nombre:
+          type: string
+          example: "Jocsan Zamora Robredo"
+        email:
+          type: string
+          example: "uncorreo@correo.dominio.com"
+        direccion:
+          type: string
+          example: "Mexico magico , Ecatepunk  Av. 56 "
+        edad:
+          type: integer
+          example: 25
+        phone:
+          type: string
+          example: "5555555555 "
+        password:
+          type: string
+          example: 'Secret'
+        role:
+          type: string
+          example: 'admin or user'
+        urlImg:
+          type: string
+          example: 'url  Image for profile'
+        timestamp:
+          type: string
+          example: 'This format is timestamp  for Example Date.now'
+       
+      xml:
+        name: user
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      xml:
+        name: tag
+    products:
+      required:
+        - name
+        - photoUrls
+      type: object
+      properties:
+        nombre:
+          type: string
+          example: "Tv"
+        descripcion:
+          type: string
+          example: "Una pantalla de plasma"
+        codigo:
+          type: number
+          example: 157
+        url:
+          type: string
+          example: http//tu.imagen.com/?categoria=2&1470
+        precio:
+          type: number
+          example: 250
+        stock:
+          type: number
+          example: 10
+        timestamp:
+          type: object
+          example: " timestamp for example using Date  for datetime example Date.now"
+      xml:
+        name: products
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    products:
+      description: products object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/products'
+       
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+  securitySchemes:
+    productsstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://productsstore3.swagger.io/oauth/authorize
+          scopes:
+            write:productss: modify productss in your account
+            read:productss: read your productss
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header

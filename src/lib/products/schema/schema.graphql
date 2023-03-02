@@ -1,0 +1,32 @@
+type Products {
+  _id: ID!
+  nombre: String!
+  descripcion: String!
+  codigo: String!
+  url: String!
+  precio: String!
+  stock: String!
+  timestamp: String!
+}
+
+type Query {
+  "Devuelve todos los prodctos"
+  getAllProdcts: [Products]
+  "Devuelve un producto por id "
+  getProductsById(id: ID!): Products
+}
+
+input ProductInput {
+  nombre: String!
+  descripcion: String!
+  codigo: String!
+  url: String!
+  precio: String!
+  stock: String!
+  timestamp: String!
+}
+
+type Mutation {
+  "Agrega Prductos"
+  addProduct(input: ProductInput!): Products
+}
