@@ -1,7 +1,7 @@
 function getId(n) {
   console.log(n);
   axios
-    .get("http://localhost:8080/api/productos/" + n)
+    .get("https://ecommerce-production-d9ed.up.railway.app/api/productos/" + n)
     .then(function (response) {
       console.log(response.status);
       console.log(response.data);
@@ -17,7 +17,7 @@ function getId(n) {
 function getProductoById(n) {
   console.log(n);
   axios
-    .get("http://localhost:8080/api/productos/" + n)
+    .get("https://ecommerce-production-d9ed.up.railway.app/api/productos/" + n)
     .then(async function (response) {
       console.log('status',response.status);
       console.log(response.data);
@@ -43,7 +43,7 @@ function getAllProductCar(){
     let spanTags = document.getElementsByClassName("idCarritoTemporal");
     console.log(spanTags)
     axios
-    .get("http://localhost:8080/api/carrito/"+spanTags[0].id +"/productos")
+    .get("https://ecommerce-production-d9ed.up.railway.app/api/carrito/"+spanTags[0].id +"/productos")
     .then(async function (response) {
       const data = await response.data.articulo
       
@@ -97,9 +97,9 @@ function getDeleteProductCar(idArticulo) {
 
   if (document.getElementById(idArticulo).value >0) {
   let idCard=document.getElementsByClassName('container')[2].id
-  console.log("http://localhost:8080/api/carrito/"+idCard+"/productos/"+idArticulo)
+  console.log("https://ecommerce-production-d9ed.up.railway.app/api/carrito/"+idCard+"/productos/"+idArticulo)
     axios
-    .delete("http://localhost:8080/api/carrito/"+idCard+"/productos/"+idArticulo)
+    .delete("https://ecommerce-production-d9ed.up.railway.app/api/carrito/"+idCard+"/productos/"+idArticulo)
     .then(async function (response) {
        location.reload();
     })
@@ -123,7 +123,7 @@ function getNewCar(idArticulo, cantidad = 1) {
     
 
     axios
-      .post("http://localhost:8080/api/carrito/", {
+      .post("https://ecommerce-production-d9ed.up.railway.app/api/carrito/", {
         idArticulo,
         cantidad,
       })
@@ -143,7 +143,7 @@ function getNewCar(idArticulo, cantidad = 1) {
     let spanTags = document.getElementsByClassName("idCarritoTemporal");
 
     axios
-      .post("http://localhost:8080/api/carrito/"+spanTags[0].id+"/productos", {
+      .post("https://ecommerce-production-d9ed.up.railway.app/api/carrito/"+spanTags[0].id+"/productos", {
         
         idArticulo:idArticulo,
         cantidad:cantidad
