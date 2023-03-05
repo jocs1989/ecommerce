@@ -127,7 +127,8 @@ export async function agregarOrden(req, res) {
       orden.iva=iva.toFixed(2)
       orden.talaPagar=talaPagar.toFixed(2)
       await Orden.save(orden)
-      gmail(orden.email,'Gracias por tu compra Shop Full', orden)
+      
+      await gmail(orden.email,'Gracias por tu compra Shop Full', orden)
     res.status(200).redirect('/api/productos');
   } catch (err) {
     console.error(err);
