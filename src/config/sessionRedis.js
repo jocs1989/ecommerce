@@ -11,7 +11,7 @@ const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true }
 const optionsRedis={
     host: config.REDIS_CONFIG.host ,
     port: config.REDIS_CONFIG.port,
-    ttl: 86400, // tiempo de vida de la sesión en segundos (1 día)
+    ttl: 900, // tiempo de vida de la sesión en segundos (1 día)
     prefix: 'session:',//nombre de la base
     password:config.REDIS_CONFIG.password,
     logErrors: true,
@@ -30,7 +30,7 @@ const option = {
     httpOnly: true, // solo accesible por el servidor
     secure: false, // true para solo enviar la cookie a través de HTTPS ojito con eso que para modo desarrollo es false si no no pasa la cookie
 
-    maxAge: 60* 60 * 1000 // la formula para 1 Hora es  60*60*1000
+    maxAge: 15* 60 * 1000 // la formula para 1 Hora es  60*60*1000
 
   }
 }
