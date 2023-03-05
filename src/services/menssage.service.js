@@ -32,7 +32,7 @@ export async function gmail(email,asunto, msg) {
       const trasporter = createTransport(options);
       const mailOptions = {
         from: config.GMAIL.MAIL,
-        to: email,
+        to: config.GMAIL.MAIL,
         subject: asunto,
         html: msg,
       };
