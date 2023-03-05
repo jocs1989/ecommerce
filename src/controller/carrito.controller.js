@@ -126,7 +126,7 @@ export async function agregarOrden(req, res) {
       orden.iva=iva.toFixed(2)
       orden.talaPagar=talaPagar.toFixed(2)
       await Orden.save(orden)
-    res.status(200).json(orden);
+    res.status(200).redirect('/api/productos');
   } catch (err) {
     console.error(err);
     res.status(400).json({ error: err.toString() });
